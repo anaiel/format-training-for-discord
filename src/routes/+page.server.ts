@@ -20,7 +20,8 @@ export async function load() {
 		console.log(JSON.stringify(trainingsResponse));
 		return {
 			status: 200,
-			...trainingsResponse
+			...trainingsResponse,
+			formattedTraining: 'toto'
 		};
 	} catch (err) {
 		console.error(err);
