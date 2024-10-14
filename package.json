@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@notionhq/client": "^2.2.15"
+		"@notionhq/client": "^2.2.15",
+		"@sveltejs/adapter-vercel": "^5.4.5"
 	}
 }
