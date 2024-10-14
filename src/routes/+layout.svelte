@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	export let data;
-	const { formattedTrainings } = data;
+	const { trainingsForSelectPromise } = data;
 </script>
 
 <header>Boucherie - Autocoaching A</header>
@@ -13,7 +13,7 @@
 		Discord.
 	</p>
 
-	{#await formattedTrainings}
+	{#await trainingsForSelectPromise}
 		Chargement des entrainements
 	{:then trainings}
 		<label for="select">Choisir l'entrainement :</label>

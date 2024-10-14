@@ -1,10 +1,10 @@
 <script>
 	export let data;
-	$: formattedTraining = data.formattedTraining;
+	$: formattedTrainingPromise = data.formattedTrainingPromise;
 </script>
 
 <div class="container">
-	{#await formattedTraining}
+	{#await formattedTrainingPromise}
 		Formattage en cours...
 	{:then training}
 		<pre><code>{training}</code></pre>

@@ -3,7 +3,7 @@ import notion from '$lib/notion-client';
 import { formatResultsForSelect } from '$lib/trainings';
 
 export async function load() {
-	const trainingsData = notion.databases.query({
+	const trainingsPromise = notion.databases.query({
 		database_id: EXERCISES_DB_ID,
 		filter: {
 			property: 'Type',
@@ -12,12 +12,12 @@ export async function load() {
 			}
 		}
 	});
-	const formattedTrainings = (async () => {
-		const trainingsResponse = await trainingsData;
+	const trainingsForSelectPromise = (async () => {
+		const trainingsResponse = await trainingsPromise;
 		return formatResultsForSelect(trainingsResponse.results);
 	})();
 	return {
-		trainingsData,
-		formattedTrainings
+		trainingsPromise,
+		trainingsForSelectPromise
 	};
 }
