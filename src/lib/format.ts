@@ -1,11 +1,17 @@
 import type { PageData } from '../routes/$types';
 import notion from '$lib/notion-client';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { getBlock, getTime } from '$lib/exercise';
+import type {
+	PageObjectResponse,
+	QueryDatabaseResponse
+} from '@notionhq/client/build/src/api-endpoints';
+import { getBlock, getTime, getTitle, getInstructions } from '$lib/exercise';
 
-export async function formatTraining(training: PageData, trainingId: string): Promise<string> {
+export async function formatTraining(
+	trainings: QueryDatabaseResponse,
+	trainingId: string
+): Promise<string> {
 	try {
-		const exercises = await retrieveExercises(training, trainingId);
+		const exercises = (await retrieveExercises(trainings, trainingId)).sort(sortByTime);
 		let formattedTraining = '';
 		let currentBlock: string | undefined;
 		for (const exercise of exercises) {
@@ -14,17 +20,22 @@ export async function formatTraining(training: PageData, trainingId: string): Pr
 			}
 
 			const nextBlock = getBlock(exercise);
-			if (nextBlock && nextBlock !== currentBlock) {
-				formattedTraining += `**${nextBlock.toUpperCase()}\n\n`;
-			}
-			currentBlock = nextBlock;
-
 			const time = getTime(exercise);
-			if (time) {
-				formattedTraining += `**${time}**\n`;
+			const title = await getTitle(exercise);
+			const instructions = getInstructions(exercise);
+
+			let exerciseText = `**${time}** : ${title ?? ''}
+${instructions}
+`;
+			if (nextBlock && nextBlock !== currentBlock) {
+				exerciseText = `**${nextBlock.toUpperCase()}**
+
+${exerciseText}`;
 			}
+
+			formattedTraining += exerciseText;
 		}
-		return 'toto';
+		return formattedTraining;
 	} catch (err) {
 		console.error(err);
 		return '';
@@ -32,10 +43,10 @@ export async function formatTraining(training: PageData, trainingId: string): Pr
 }
 
 async function retrieveExercises(
-	training: PageData,
+	trainings: QueryDatabaseResponse,
 	trainingId: string
 ): Promise<PageObjectResponse[]> {
-	const page = training.results?.find((page) => page.id === trainingId);
+	const page = trainings.results?.find((page) => page.id === trainingId);
 	if (!page) throw new Error('Training not found');
 	const pageResult = await notion.blocks.children.list({ block_id: page.id });
 	if (!pageResult) throw new Error('Page not found');
@@ -45,4 +56,10 @@ async function retrieveExercises(
 	if (!childDatabase) throw new Error('Child database not found');
 	const childDatabaseResponse = await notion.databases.query({ database_id: childDatabase.id });
 	return childDatabaseResponse.results as PageObjectResponse[];
+}
+
+function sortByTime(a: PageObjectResponse, b: PageObjectResponse) {
+	const timeA = getTime(a);
+	const timeB = getTime(b);
+	return timeA.localeCompare(timeB);
 }
