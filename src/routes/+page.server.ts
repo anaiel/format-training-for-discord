@@ -1,10 +1,5 @@
-import { EXERCISES_DB_ID, NOTION_API_KEY } from '$env/static/private';
-import { Client } from '@notionhq/client';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-
-const notion = new Client({
-	auth: NOTION_API_KEY
-});
+import { EXERCISES_DB_ID } from '$env/static/private';
+import notion from '$lib/notion-client';
 
 export async function load() {
 	try {
@@ -17,11 +12,9 @@ export async function load() {
 				}
 			}
 		});
-		console.log(JSON.stringify(trainingsResponse));
 		return {
 			status: 200,
-			...trainingsResponse,
-			formattedTraining: 'toto'
+			...trainingsResponse
 		};
 	} catch (err) {
 		console.error(err);

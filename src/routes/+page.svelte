@@ -1,11 +1,15 @@
 <script>
 	import { formatResultsForSelect } from '$lib/trainings';
+	import { formatTraining } from '$lib/format';
 
 	export let data;
 
 	const trainings = data.results ? formatResultsForSelect(data.results) : undefined;
 	let selectedValue = trainings ? trainings[0].id : '';
-	let formattedTraining = data.formattedTraining;
+	let formattedTraining = '';
+	(async () => {
+		formattedTraining = await formatTraining(data, selectedValue);
+	})();
 </script>
 
 <h1>Formatter l'entrainement pour Discord</h1>
