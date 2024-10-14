@@ -3,7 +3,7 @@ import notion from '$lib/notion-client';
 
 export function getBlock(exercise: PageObjectResponse): string {
 	const blockObject = exercise.properties['Bloc'];
-	if (blockObject && blockObject.type === 'title') {
+	if (blockObject && blockObject.type === 'title' && blockObject.title.length > 0) {
 		const title = blockObject.title[0];
 		if (title.type === 'text') {
 			return title.text.content;
