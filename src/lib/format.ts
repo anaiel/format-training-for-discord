@@ -1,4 +1,3 @@
-import type { PageData } from '../routes/$types';
 import notion from '$lib/notion-client';
 import type {
 	PageObjectResponse,
@@ -24,16 +23,16 @@ export async function formatTraining(
 			const title = await getTitle(exercise);
 			const instructions = getInstructions(exercise);
 
-			let exerciseText = `**${time}** : ${title ?? ''}
-${instructions}
-`;
+			let exerciseText = `**${time}** : ${title ?? ''}\n`;
+			if (instructions) {
+				exerciseText += `${instructions}\n`;
+			}
 			if (nextBlock && nextBlock !== currentBlock) {
-				exerciseText = `**${nextBlock.toUpperCase()}**
-
-${exerciseText}`;
+				exerciseText = `**${nextBlock.toUpperCase()}**\n\n${exerciseText}`;
 			}
 
 			formattedTraining += exerciseText;
+			currentBlock = nextBlock;
 		}
 		return formattedTraining;
 	} catch (err) {

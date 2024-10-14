@@ -46,7 +46,7 @@ export function getInstructions(exercise: PageObjectResponse): string {
 		instructionsObject.type === 'rich_text' &&
 		instructionsObject.rich_text.length > 0
 	) {
-		return instructionsObject.rich_text[0].plain_text;
+		return instructionsObject.rich_text.map(({ plain_text }) => plain_text).join('');
 	}
 	return '';
 }
