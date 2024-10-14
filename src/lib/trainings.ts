@@ -44,7 +44,9 @@ export function formatResultsForSelect(
 			} else if (!dateB) {
 				return -1;
 			} else {
-				return dateHash(dateA).localeCompare(dateHash(dateB));
+				if (dateB.year - dateA.year !== 0) return dateB.year - dateA.year;
+				if (dateB.month - dateA.month !== 0) return dateB.month - dateA.month;
+				return dateB.day - dateA.day;
 			}
 		});
 }
@@ -61,7 +63,7 @@ function extractDate(entry: { name: string }): IDate | undefined {
 			month: +dateString.slice(5, 7),
 			year: +dateString.slice(0, 4)
 		};
-	} else if (dateString.match(/[0-9]{5}$/)) {
+	} else if (dateString.match(/[0-9]{4}$/)) {
 		// Assume DD/MM/YYYY
 		return {
 			day: +dateString.slice(0, 2),
@@ -76,8 +78,4 @@ function extractDate(entry: { name: string }): IDate | undefined {
 			year: 2000 + +dateString.slice(-2)
 		};
 	}
-}
-
-function dateHash({ day, month, year }: IDate): string {
-	return `${year}/${month}/${day}`;
 }
