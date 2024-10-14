@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	const { formattedTraining } = data;
+	$: formattedTraining = data.formattedTraining;
 </script>
 
 <div class="container">
