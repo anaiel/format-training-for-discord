@@ -1,14 +1,8 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { formatResultsForSelect } from '$lib/trainings';
 
 	export let data;
-	const { trainingsData } = data;
-
-	const trainings = trainingsData.results
-		? formatResultsForSelect(trainingsData.results)
-		: undefined;
-	let selectedValue = trainings ? trainings[0].id : '';
+	const { formattedTrainings } = data;
 </script>
 
 <header>Boucherie - Autocoaching A</header>
@@ -19,11 +13,10 @@
 		Discord.
 	</p>
 
-	{#if trainings}
+	{#if formattedTrainings}
 		<label for="select">Choisir l'entrainement :</label>
 		<select
 			id="select"
-			bind:value={selectedValue}
 			on:change={(e) => {
 				const trainingId = e.currentTarget.value;
 				if (trainingId) {
@@ -31,7 +24,7 @@
 				}
 			}}
 		>
-			{#each trainings as { name, id }}
+			{#each formattedTrainings as { name, id }}
 				<option value={id}>{name}</option>
 			{/each}
 		</select>

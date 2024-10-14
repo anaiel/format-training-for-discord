@@ -1,5 +1,6 @@
 import { EXERCISES_DB_ID } from '$env/static/private';
 import notion from '$lib/notion-client';
+import { formatResultsForSelect } from '$lib/trainings';
 
 export async function load() {
 	const trainingsResponse = await notion.databases.query({
@@ -11,7 +12,9 @@ export async function load() {
 			}
 		}
 	});
+	const formattedTrainings = formatResultsForSelect(trainingsResponse.results);
 	return {
-		trainingsData: trainingsResponse
+		trainingsData: trainingsResponse,
+		formattedTrainings
 	};
 }
