@@ -8,11 +8,9 @@ export async function load({ params, parent }) {
 		const trainingsForSelect = await trainingsForSelectPromise;
 		redirect(307, `/${trainingsForSelect[0].id}`);
 	}
-	const formattedTrainingPromise = (async () => {
-		const trainings = await trainingsPromise;
-		return await formatTraining(trainings, trainingId);
-	})();
 	return {
-		formattedTrainingPromise
+		formattedTrainingPromise: trainingsPromise.then((trainings) => {
+			return formatTraining(trainings, trainingId);
+		})
 	};
 }

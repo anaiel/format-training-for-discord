@@ -12,12 +12,10 @@ export async function load() {
 			}
 		}
 	});
-	const trainingsForSelectPromise = (async () => {
-		const trainingsResponse = await trainingsPromise;
-		return formatResultsForSelect(trainingsResponse.results);
-	})();
 	return {
 		trainingsPromise,
-		trainingsForSelectPromise
+		trainingsForSelectPromise: trainingsPromise.then((trainings) => {
+			return formatResultsForSelect(trainings.results);
+		})
 	};
 }
