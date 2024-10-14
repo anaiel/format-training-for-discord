@@ -11,10 +11,10 @@
 	let selectedValue = trainings ? trainings[0].id : '';
 </script>
 
-<header>Autocoaching A</header>
+<header>Boucherie - Autocoaching A</header>
 <main>
 	<h1>Formatter l'entrainement pour Discord</h1>
-	<p>
+	<p class="description">
 		Cet outil permet de formatter facilement un entrainement préparé sur Notion pour le coller sur
 		Discord.
 	</p>
@@ -41,3 +41,29 @@
 		<p>Une erreur est survenue</p>
 	{/if}
 </main>
+
+<style>
+	header {
+		background-color: #0bae8c;
+		padding: 16px 8px;
+		color: white;
+		font-size: 1.5rem;
+		margin-bottom: 32px;
+	}
+
+	main {
+		margin-inline: auto;
+		max-width: 1000px;
+		padding-inline: 16px;
+	}
+
+	h1 {
+		font-size: 1.25rem;
+		border-bottom: 2px solid #0bae8c;
+		margin-bottom: 16px;
+	}
+
+	.description {
+		margin-bottom: 32px;
+	}
+</style>
