@@ -13,7 +13,9 @@
 		Discord.
 	</p>
 
-	{#if formattedTrainings}
+	{#await formattedTrainings}
+		Chargement des entrainements
+	{:then trainings}
 		<label for="select">Choisir l'entrainement :</label>
 		<select
 			id="select"
@@ -24,15 +26,15 @@
 				}
 			}}
 		>
-			{#each formattedTrainings as { name, id }}
+			{#each trainings as { name, id }}
 				<option value={id}>{name}</option>
 			{/each}
 		</select>
 
 		<slot></slot>
-	{:else}
+	{:catch}
 		<p>Une erreur est survenue</p>
-	{/if}
+	{/await}
 </main>
 
 <style>

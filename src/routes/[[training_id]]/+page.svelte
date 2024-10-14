@@ -1,15 +1,21 @@
 <script>
 	export let data;
 	const { formattedTraining } = data;
-
-	function handleCopy() {
-		navigator.clipboard.writeText(formattedTraining);
-	}
 </script>
 
 <div class="container">
-	<pre><code>{formattedTraining}</code></pre>
-	<button on:click={handleCopy}>Copier</button>
+	{#await formattedTraining}
+		Formattage en cours...
+	{:then training}
+		<pre><code>{training}</code></pre>
+		<button
+			on:click={function handleCopy() {
+				navigator.clipboard.writeText(training);
+			}}>Copier</button
+		>
+	{:catch}
+		Une erreur est survenue
+	{/await}
 </div>
 
 <style>
