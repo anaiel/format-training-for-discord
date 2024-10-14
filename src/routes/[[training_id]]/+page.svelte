@@ -28,6 +28,8 @@
 		padding: 16px;
 		border-radius: 8px;
 		box-shadow: 3px 3px 4px -1px rgba(0, 0, 0, 0.68);
+		overflow: hidden;
+		white-space: pre-wrap;
 	}
 
 	button {
