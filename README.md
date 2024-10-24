@@ -1,18 +1,8 @@
-# create-svelte
+# format-training-for-discord
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+App using the Notion API to translate a Notion database (containing the content of my roller derby league's training program) into Discord copy-pastable text (to share with my teammates).
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Bootstrapped with [Vite](https://vite.dev/)/[SvelteKit](https://svelte.dev/)
 
 ## Developing
 
@@ -34,5 +24,3 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
