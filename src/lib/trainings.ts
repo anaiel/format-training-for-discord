@@ -16,7 +16,20 @@ export function formatResultsForSelect(
 	)[]
 ) {
 	return results
-		?.map((result) => {
+		.sort((a, b) => {
+			const dateA = getDate(a);
+			const dateB = getDate(b);
+			if (isNaN(dateA) && isNaN(dateB)) {
+				return 0;
+			} else if (isNaN(dateA)) {
+				return 1;
+			} else if (isNaN(dateB)) {
+				return -1;
+			} else {
+				return dateB - dateA;
+			}
+		})
+		.map((result) => {
 			if ('properties' in result) {
 				const titleEntry = Object.entries(result.properties).find(
 					([_, value]) => value.type === 'title'
@@ -35,47 +48,23 @@ export function formatResultsForSelect(
 				name: 'Unknown',
 				id: result.id
 			};
-		})
-		.sort((a, b) => {
-			const dateA = extractDate(a);
-			const dateB = extractDate(b);
-			if (!dateA) {
-				return 1;
-			} else if (!dateB) {
-				return -1;
-			} else {
-				if (dateB.year - dateA.year !== 0) return dateB.year - dateA.year;
-				if (dateB.month - dateA.month !== 0) return dateB.month - dateA.month;
-				return dateB.day - dateA.day;
-			}
 		});
 }
 
-function extractDate(entry: { name: string }): IDate | undefined {
-	const dateString = entry.name.match(/[0-9]{1,4}\/[0-9]{1,2}\/[0-9]{1,4}/)?.[0];
-	if (!dateString) {
-		return undefined;
+const getDate = (
+	page:
+		| PageObjectResponse
+		| PartialPageObjectResponse
+		| PartialDatabaseObjectResponse
+		| DatabaseObjectResponse
+) => {
+	let date: string | undefined = undefined;
+	if ('properties' in page && 'Date' in page.properties && page.properties.Date.type === 'date') {
+		date = page.properties.Date.date?.start;
 	}
-	if (dateString.match(/^[0-9]{4}/)) {
-		// Assume YYYY/MM/DD
-		return {
-			day: +dateString.slice(-2),
-			month: +dateString.slice(5, 7),
-			year: +dateString.slice(0, 4)
-		};
-	} else if (dateString.match(/[0-9]{4}$/)) {
-		// Assume DD/MM/YYYY
-		return {
-			day: +dateString.slice(0, 2),
-			month: +dateString.slice(3, 5),
-			year: +dateString.slice(-4)
-		};
-	} else {
-		// Assume DD/MM/YY
-		return {
-			day: +dateString.slice(0, 2),
-			month: +dateString.slice(3, 5),
-			year: 2000 + +dateString.slice(-2)
-		};
-	}
-}
+	// Remove "-" and convert to number. Example: "2021-10-01" => 20211001. This
+	// way we can compare dates as numbers.
+	const withoutHyphen = date?.replaceAll('-', '');
+	const dateAsNumber = Number(withoutHyphen);
+	return dateAsNumber;
+};
